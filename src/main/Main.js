@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { ContentDisplay } from "../components/others/";
-import { Error404Page } from "../components/pages";
 
 export default class Main extends Component {
 	render() {
@@ -10,14 +9,14 @@ export default class Main extends Component {
 				displayName={Main.displayName}
 				displayClearHistory={false}
 				faIcon={"fa-trash"}
-				contentBodyAdditionalClasses={["cat-gpt-content-wrapper"]}
+				contentBodyAdditionalClasses={[]}
 				router={this.props.router}
-				handleHeaderTitleClick={() => { console.log("please do not the cat"); }}
+				handleHeaderTitleClick={() => { }}
 			>
-				<Error404Page customWarning={"well... this is awkward..."} />
+
 			</ContentDisplay>
 		);
 	}
 }
 
-Main.displayName = "Display Name";
+Main.displayName = "Utilities Page";
