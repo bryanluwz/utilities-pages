@@ -1,0 +1,159 @@
+/* Utils main  */
+.utils-page-box {
+    width: calc(100% - 40px);
+    height: fit-content;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    border-radius: 30px;
+
+    background-color: var(--lavender-pastel-5);
+
+    font-family: "Poppins", sans-serif;
+    color: var(--lavender-pastel-font-1);
+
+    transition: all 0.4s ease;
+}
+
+.utils-page-box .utils-title {
+    font-size: var(--h2-font-size);
+    font-weight: 500;
+}
+
+.utils-page-box .utils-description {
+    font-size: var(--h4-font-size);
+}
+
+.utils-page-box .ui-flex-column {
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px;
+
+    gap: 10px;
+
+    border-radius: 30px;
+
+    background-color: var(--lavender-pastel-4);
+}
+
+.utils-page-box .ui-flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+}
+
+.utils-page-box .ui-flex-row > *:first-child {
+    width: max(100px, 30%);
+    margin-right: 20px;
+}
+
+/* Utils ui */
+.ui-file-input-wrapper,
+.ui-button {
+    padding: 10px 0;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: #ffffff;
+    outline: transparent;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: all 0.4s ease;
+
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    user-select: none;
+}
+
+.ui-file-input-wrapper:hover,
+.ui-button:hover {
+    background-color: var(--lavender-pastel-1);
+    color: white;
+}
+
+.ui-file-input-wrapper > div {
+    text-align: center;
+}
+
+.ui-file-input-wrapper > input {
+    display: none;
+}
+
+.ui-extra-info {
+    height: 30px;
+    text-align: center;
+}
+
+/* Select and option thing */
+.ui-select {
+    display: flex;
+}
+
+.ui-select select {
+    width: max-content;
+
+    padding: 8px;
+    padding-right: 20px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    font: inherit;
+    color: inherit;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.ui-select .ui-select-arrow {
+    position: relative;
+}
+
+.ui-select .ui-select-arrow > i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+
+    color: inherit;
+    pointer-events: none;
+
+    transition: all 0.4s ease;
+}
+
+.ui-select select option {
+    padding: 5px;
+
+    font-size: 14px;
+    font: inherit;
+    color: inherit;
+}
+
+.ui-select option:checked {
+    background-color: var(--lavender-pastel-1);
+    color: #fff;
+}
+
+.ui-select option:hover {
+    background-color: var(--lavender-pastel-3);
+    color: #fff;
+}

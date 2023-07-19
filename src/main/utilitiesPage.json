@@ -1,0 +1,22 @@
+{
+    "ffmpeg Conversion": {
+        "title": "ffmpeg Conversion",
+        "description": "Convert between different file formats using ffmpeg",
+        "ui": [
+            {
+                "tag": "input",
+                "type": "file",
+                "placeholder": "Input file",
+                "content": "file"
+            },
+            { "tag": "div", "content": "File content" },
+            { "tag": "select", "options": ["mp4", "mp3"] },
+            {
+                "tag": "a",
+                "href": "fileurl",
+                "download": "filename",
+                "dangerouslySetInnerHTML": { "__html": "download" }
+            }
+        ]
+    }
+}
