@@ -1,4 +1,5 @@
 import { Component, createRef } from "react";
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 export default class UtilitiesPageBox extends Component {
 	render() {
@@ -39,6 +40,42 @@ export default class UtilitiesPageBox extends Component {
 	}
 }
 
+
+
+export const ffmpegService = async () => {
+	const ffmpeg = createFFmpeg({ log: true });
+
+	const readAsArrayBuffer = (file) =>
+		new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = (error) => reject(error);
+			reader.readAsArrayBuffer(file);
+		});
+
+	// Load the ffmpeg.wasm library
+	await ffmpeg.load();
+
+	// Set up the input and output files and run ffmpeg commands
+	const processVideo = async (inputFile, outputFileName) => {
+		const inputFileData = await readAsArrayBuffer(inputFile);
+
+		console.log(inputFileData);
+
+		await ffmpeg.FS('writeFile', inputFile.name, new Uint8Array(inputFileData));
+
+		await ffmpeg.run('-i', inputFile.name, '-y', outputFileName);
+
+		const data = ffmpeg.FS('readFile', outputFileName);
+
+		return new Blob([data.buffer], { type: 'video/mp4' });
+	};
+
+	return { processVideo };
+};
+
+
+
 export class UtilitiesPageFfmpegConversion extends Component {
 	constructor(props) {
 		super(props);
@@ -46,21 +83,55 @@ export class UtilitiesPageFfmpegConversion extends Component {
 		this.inputFileTypeRef = createRef();
 		this.extraInfoLabelRef = createRef();
 
+		this.inputFile = null;
+		this.inputFileName = null;
+		this.outputFile = null;
+		this.downloadLink = null;
+
 		this.state = {
 			convertFileTypeSelectArrowIsRotated: false
 		};
+
+		this.ffmpegService = null;
+	}
+
+	componentDidMount() {
+		this.downloadLink = document.createElement('a');
 	}
 
 	handleConvertButtonClick = async () => {
-		this.extraInfoLabelRef.current.innerHTML = "Converting...";
-		setTimeout(() => {
-			this.extraInfoLabelRef.current.innerHTML = "Done!";
-			setTimeout(() => {
-				this.extraInfoLabelRef.current.innerHTML = "";
-			}
-				, 1000);
+		if (this.inputFile === null) {
+			return;
 		}
-			, 1000);
+
+		if (!this.ffmpegService) {
+			this.ffmpegService = await ffmpegService();
+		}
+
+		const outputFileName = this.inputFileName.split('.')[0] + '_converted.' + document.querySelector('.ui-select select').value;
+
+		this.ffmpegService.processVideo(this.inputFile, outputFileName)
+			.then((processedVideo) => {
+				this.outputFile = URL.createObjectURL(processedVideo);
+			})
+			.then(() => {
+				this.downloadLink.href = this.outputFile;
+				this.downloadLink.download = outputFileName;
+				this.downloadLink.innerHTML = "Download";
+				this.downloadLink.click();
+				this.extraInfoLabelRef.current.appendChild(this.downloadLink);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	handleFileUpload = (event) => {
+		let inputFileName = event.target?.files[0]?.name;
+		inputFileName = inputFileName ? inputFileName : "None";
+		this.inputFileName = inputFileName;
+		this.inputFileTypeRef.current.innerHTML = "Input: " + inputFileName;
+		this.inputFile = event.target.files[0];
 	};
 
 	render() {
@@ -79,9 +150,7 @@ export class UtilitiesPageFfmpegConversion extends Component {
 							<input
 								type="file"
 								id="file-input"
-								onChange={(event) => {
-									this.inputFileTypeRef.current.innerHTML = "Input: " + event.target.files[0].name;
-								}}
+								onChange={this.handleFileUpload}
 							/>
 						</label>
 						<div ref={this.inputFileTypeRef}>
@@ -131,7 +200,7 @@ export class UtilitiesPageFfmpegConversion extends Component {
 						id="convert-button"
 						onClick={this.handleConvertButtonClick}
 					>
-						Convert and Download
+						Convert
 					</button>
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 
@@ -140,4 +209,4 @@ export class UtilitiesPageFfmpegConversion extends Component {
 			</div>
 		);
 	}
-}
+};
