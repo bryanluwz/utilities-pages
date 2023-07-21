@@ -8,7 +8,11 @@ Check it out [here](https://bryanluwz.github.io/utilities-pages)
 
 ## Active Features
 
-1. FFMPEG supported conversion
+1. Anything to `base64` encoding
+
+## Inactive Features
+
+1. FFMPEG supported conversion (cant host on gh pages)
 
 ## Active Bugs (aka potential features)
 
@@ -16,5 +20,4 @@ Check it out [here](https://bryanluwz.github.io/utilities-pages)
 
 ## WIP
 
-1. Audio (or other format) to text encoding
-2. FFMPEG Conversion will automatically unload itself if inactive
+1. Not using ffmpeg to do conversion, sianz after i wasted a few hours of my life doing that

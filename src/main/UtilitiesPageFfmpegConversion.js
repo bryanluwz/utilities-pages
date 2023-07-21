@@ -1,3 +1,4 @@
+// Oh mah god this doesnt work on github pages and on some browser so im scrapping this
 import { Component, Fragment, createRef } from "react";
 
 // These imports are for ffmpeg conversion

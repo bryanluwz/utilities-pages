@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { ContentDisplay } from "../components/others/";
-import { UtilitiesPageFfmpegConversion } from "./UtilitiesPageFfmpegConversion";
+import { UtilitiesPageEncoder } from "./UtilitiesPageEncoder";
+import { UtilitiesPageConverter } from "./UtilitiesPageConverter";
 
 export default class Main extends Component {
 	constructor(props) {
@@ -22,11 +23,12 @@ export default class Main extends Component {
 				displayName={Main.displayName}
 				displayClearHistory={false}
 				faIcon={"fa-trash"}
-				contentBodyAdditionalClasses={[]}
+				contentBodyAdditionalClasses={["utils-page-wrapper"]}
 				router={this.props.router}
 				handleHeaderTitleClick={() => { }}
 			>
-				<UtilitiesPageFfmpegConversion />
+				<UtilitiesPageEncoder />
+				<UtilitiesPageConverter />
 			</ContentDisplay>
 		);
 	}

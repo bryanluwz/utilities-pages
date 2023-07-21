@@ -1,4 +1,8 @@
 /* Utils main  */
+.utils-page-wrapper > * {
+    margin-bottom: 20px;
+}
+
 .utils-page-box {
     width: calc(100% - 40px);
     height: fit-content;
@@ -133,6 +137,20 @@
     text-align: center;
     user-select: none;
     text-decoration: none;
+}
+
+.ui-extra-info > .ui-text-output {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+
+    word-break: break-all;
+}
+
+.ui-extra-info > .ui-text-title {
+    margin: 10px;
+
+    text-align: center;
 }
 
 /* Select and option thing */
