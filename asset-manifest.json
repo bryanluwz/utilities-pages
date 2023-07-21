@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/utilities-page/static/css/main.abe4bfde.css",
+    "main.js": "/utilities-page/static/js/main.fe3de18d.js",
+    "static/media/lulo-font.ttf": "/utilities-page/static/media/lulo-font.cf6ce051896b18d3449b.ttf",
+    "index.html": "/utilities-page/index.html",
+    "main.abe4bfde.css.map": "/utilities-page/static/css/main.abe4bfde.css.map",
+    "main.fe3de18d.js.map": "/utilities-page/static/js/main.fe3de18d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.abe4bfde.css",
+    "static/js/main.fe3de18d.js"
+  ]
+}
