@@ -2,7 +2,7 @@ import { Component, Fragment, createRef } from "react";
 
 // These imports are for ffmpeg conversion
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
-import ProgressBar from "../components/others/ProgressBar";
+import { ProgressBar } from "../components/others";
 
 
 // FFMPEG Conversion Page and other related functions here
@@ -182,7 +182,7 @@ export class UtilitiesPageFfmpegConversion extends Component {
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 						{
 							this.state.isConverting ?
-								<ProgressBar ref={this.progressBarRef} progress={0} /> :
+								<ProgressBar ref={this.progressBarRef} progress={0} showNumber /> :
 								this.state.isError ?
 									"Oops... something went wrong with the conversion" :
 									this.outputFile ?

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { ContentDisplay } from "../components/others/";
-import { UtilitiesPageFfmpegConversion } from "./UtilitiesPage";
+import { UtilitiesPageFfmpegConversion } from "./UtilitiesPageFfmpegConversion";
 
 export default class Main extends Component {
 	constructor(props) {
