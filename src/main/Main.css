@@ -48,14 +48,22 @@
     text-align: center;
 }
 
-.utils-page-box .ui-flex-row > *:first-child {
-    width: max(100px, 30%);
-    margin-right: 20px;
+@media screen and (max-width: 500px) {
+    .ui-flex-row {
+        flex-direction: column !important;
+    }
+}
+
+.utils-page-box .ui-flex-row > * {
+    /* width: max(100px, 30%); */
+    padding: 10px 20px;
+    margin: 0px 20px;
 }
 
 /* Utils ui */
 .ui-file-input-wrapper,
 .ui-button {
+    width: auto;
     padding: 10px 0;
 
     display: flex;
@@ -77,8 +85,16 @@
     user-select: none;
 }
 
+.ui-button-disabled,
+.ui-button-disabled:hover {
+    background-color: var(--lavender-pastel-3) !important;
+    color: white !important;
+    cursor: not-allowed;
+}
+
 .ui-file-input-wrapper:hover,
-.ui-button:hover {
+.ui-button:hover,
+.ui-extra-info > a:hover {
     background-color: var(--lavender-pastel-1);
     color: white;
 }
@@ -92,8 +108,31 @@
 }
 
 .ui-extra-info {
-    height: 30px;
+    height: max-content;
     text-align: center;
+}
+
+.ui-extra-info > a {
+    padding: 10px 0;
+
+    display: flex;
+    justify-content: center;
+
+    background-color: #ffffff;
+    outline: transparent;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: all 0.4s ease;
+
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    user-select: none;
+    text-decoration: none;
 }
 
 /* Select and option thing */
@@ -122,6 +161,7 @@
     cursor: pointer;
 
     user-select: none;
+    overflow: hidden;
 }
 
 .ui-select .ui-select-arrow {
@@ -154,6 +194,7 @@
 }
 
 .ui-select option:hover {
+    /* Lol this doesnt work */
     background-color: var(--lavender-pastel-3);
     color: #fff;
 }
