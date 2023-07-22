@@ -139,6 +139,16 @@
     text-decoration: none;
 }
 
+.ui-extra-info > img {
+    width: 100%;
+    height: auto;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+    object-fit: cover;
+}
+
 .ui-extra-info > .ui-text-output {
     padding: 10px;
     background-color: white;

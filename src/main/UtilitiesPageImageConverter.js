@@ -139,12 +139,15 @@ export class UtilitiesPageImageConverter extends Component {
 								this.state.isError ?
 									"Oops... something went wrong with the conversion" :
 									this.outputFile ?
-										<a
-											ref={this.downloadLinkRef}
-											href={this.outputFile}
-											download={this.outputFileName} >
-											Download {this.outputFileName}
-										</a> :
+										<Fragment>
+											<a
+												ref={this.downloadLinkRef}
+												href={this.outputFile}
+												download={this.outputFileName} >
+												Download {this.outputFileName}
+											</a>
+											<img src={this.outputFile} alt="whr img" />
+										</Fragment > :
 										<Fragment />
 						}
 					</div>
@@ -156,4 +159,4 @@ export class UtilitiesPageImageConverter extends Component {
 
 UtilitiesPageImageConverter.displayName = "Image Converter";
 UtilitiesPageImageConverter.title = "Image Converter";
-UtilitiesPageImageConverter.description = "Convert images to different formats";
+UtilitiesPageImageConverter.description = "Convert images to different formats";;
