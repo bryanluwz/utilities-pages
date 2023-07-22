@@ -24,7 +24,7 @@ yarn-error.log*
 
 # others
 commands.txt
-TODO.txt
+TODO.*
 *.zip
 help.js
 .vscode

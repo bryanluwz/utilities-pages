@@ -1,9 +1,12 @@
 import { Component, createRef, Fragment } from "react";
 
 
-export class UtilitiesPageEncoder extends Component {
+export class UtilitiesPageBase64Encoder extends Component {
 	constructor(props) {
 		super(props);
+
+		this.title = "Base64 Encoder";
+		this.description = "Convert files to Base64 string";
 
 		this.inputFileTypeRef = createRef();
 		this.extraInfoLabelRef = createRef();
@@ -55,10 +58,10 @@ export class UtilitiesPageEncoder extends Component {
 		return (
 			<div className="utils-page-box">
 				<div className="utils-title">
-					Anything to Base64 Encoder
+					{this.title}
 				</div>
 				<div className="utils-description">
-					Convert files to Base64 string
+					{this.description}
 				</div>
 				<div className="ui-flex-column">
 					<div className="ui-flex-row">
@@ -101,7 +104,6 @@ export class UtilitiesPageEncoder extends Component {
 												{this.outputText.length > 100 ? this.outputText.substring(0, 100) + " ... " + this.outputText.slice(-20) : this.outputText}
 											</div>
 										</Fragment> :
-
 										<Fragment />
 						}
 					</div>
@@ -110,3 +112,7 @@ export class UtilitiesPageEncoder extends Component {
 		);
 	}
 };
+
+UtilitiesPageBase64Encoder.displayName = "Base64 Encoder";
+UtilitiesPageBase64Encoder.title = "Base64 Encoder";
+UtilitiesPageBase64Encoder.description = "Convert files to Base64 string";
