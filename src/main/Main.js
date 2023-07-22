@@ -11,13 +11,9 @@ export default class Main extends Component {
 		this.state = {
 			allUtilities: {
 				"UtilitiesPageEncoder": UtilitiesPageBase64Encoder,
-				"UtilitiesPageConverter": UtilitiesPageImageConverter
-			},
+				"UtilitiesPageImageConverter": UtilitiesPageImageConverter
+			}
 		};
-
-	}
-
-	componentDidMount() {
 	}
 
 	render() {
@@ -39,9 +35,10 @@ export default class Main extends Component {
 				{Object.keys(this.state.allUtilities).map((key, index) => {
 					const Tag = this.state.allUtilities[key];
 					return (
-						<Tag />
+						<Tag key={index} />
 					);
 				})}
+				<div style={{ height: "10px" }} justForPaddingAtTheBottom />
 			</ContentDisplay>
 		);
 	}

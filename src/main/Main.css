@@ -141,12 +141,17 @@
 
 .ui-extra-info > img {
     width: 100%;
+    max-width: 300px;
     height: auto;
 
     border-radius: 10px;
 
     margin-top: 10px;
     object-fit: cover;
+
+    transition: all 1s ease;
+
+    transform: top center;
 }
 
 .ui-extra-info > .ui-text-output {

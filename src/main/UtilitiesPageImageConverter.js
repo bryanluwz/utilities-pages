@@ -1,5 +1,4 @@
 import { Component, Fragment, createRef } from "react";
-import { ProgressBar } from "../components/others";
 
 export class UtilitiesPageImageConverter extends Component {
 	constructor(props) {
@@ -13,17 +12,19 @@ export class UtilitiesPageImageConverter extends Component {
 
 		this.inputFile = null;
 		this.inputFileName = null;
+
 		this.outputFile = null;
 		this.outputFileName = null;
 
 		this.downloadLinkRef = createRef();
-		this.progressBarRef = createRef();
+		this.imageOutputRef = createRef();
 
 		this.reader = null;
 
 		this.state = {
 			convertFileTypeSelectArrowIsRotated: false,
 			isConverting: false,
+			isConvertingAllowed: true,
 			isError: false
 		};
 	}
@@ -31,9 +32,30 @@ export class UtilitiesPageImageConverter extends Component {
 	componentDidMount() {
 	}
 
+	// I spent a lot of time making this animation you know
+	waitForImageOutputTransitionEnd = () => {
+		return new Promise((resolve) => {
+			const handleTransitionEnd = () => {
+				// Transition has ended, resolve the Promise
+				this.imageOutputRef.current.removeEventListener('transitionend', handleTransitionEnd);
+				this.setState({ isConvertingAllowed: true });
+				resolve();
+			};
+
+			this.imageOutputRef.current.addEventListener('transitionend', handleTransitionEnd);
+			this.setState({ isConvertingAllowed: false });
+		});
+	};
+
 	handleConvertButtonClick = async () => {
 		if (this.state.isConverting || this.inputFile === null) {
 			return;
+		}
+
+		if (this.outputFile) {
+			this.setState({ isConvertingAllowed: false });
+			this.imageOutputRef.current.style.height = "0px";
+			await this.waitForImageOutputTransitionEnd();
 		}
 
 		this.setState({ isConverting: true, isError: false });
@@ -56,7 +78,7 @@ export class UtilitiesPageImageConverter extends Component {
 					this.outputFile = canvas.toDataURL(`image/${outputFormat}`);
 
 					this.setState({ isConverting: false }, () => {
-						this.downloadLinkRef.current.click();
+						// this.downloadLinkRef.current.click();
 					});
 				};
 			};
@@ -66,6 +88,7 @@ export class UtilitiesPageImageConverter extends Component {
 			};
 		}
 
+		this.setState({ isConvertingAllowed: true });
 		this.reader.readAsDataURL(this.inputFile);
 	};
 
@@ -126,7 +149,7 @@ export class UtilitiesPageImageConverter extends Component {
 
 					</div>
 					<button
-						className={`ui-button ${this.state.isConverting ? 'ui-button-disabled' : ''}`}
+						className={`ui-button ${this.state.isConverting || !this.state.isConvertingAllowed ? 'ui-button-disabled' : ''}`}
 						id="convert-button"
 						onClick={this.handleConvertButtonClick}
 					>
@@ -146,7 +169,23 @@ export class UtilitiesPageImageConverter extends Component {
 												download={this.outputFileName} >
 												Download {this.outputFileName}
 											</a>
-											<img src={this.outputFile} alt="whr img" />
+											<img ref={this.imageOutputRef}
+												src={this.outputFile}
+												alt="whr img"
+												style={{ height: "0px" }}
+												onLoad={
+													() => {
+														const width = this.imageOutputRef.current.width;
+														const aspectRatio = this.imageOutputRef.current.naturalWidth / this.imageOutputRef.current.naturalHeight;
+														const height = width / aspectRatio;
+														this.imageOutputRef.current.style.height = height + "px";
+													}}
+												onTransitionEnd={() => {
+													// SCroll intro view
+													this.imageOutputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+												}
+												}
+											/>
 										</Fragment > :
 										<Fragment />
 						}
