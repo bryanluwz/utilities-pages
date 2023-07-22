@@ -48,7 +48,7 @@ export class UtilitiesPageImageConverter extends Component {
 	};
 
 	handleConvertButtonClick = async () => {
-		if (this.state.isConverting || this.inputFile === null) {
+		if (this.state.isConverting || !this.state.isConvertingAllowed || this.inputFile === null) {
 			return;
 		}
 
@@ -77,7 +77,7 @@ export class UtilitiesPageImageConverter extends Component {
 					this.outputFileName = this.inputFileName.split('.')[0] + `_${outputFormat}.${outputFormat}`;
 					this.outputFile = canvas.toDataURL(`image/${outputFormat}`);
 
-					this.setState({ isConverting: false }, () => {
+					this.setState({ isConverting: false, isConvertingAllowed: true }, () => {
 						// this.downloadLinkRef.current.click();
 					});
 				};
@@ -88,7 +88,6 @@ export class UtilitiesPageImageConverter extends Component {
 			};
 		}
 
-		this.setState({ isConvertingAllowed: true });
 		this.reader.readAsDataURL(this.inputFile);
 	};
 
@@ -158,35 +157,44 @@ export class UtilitiesPageImageConverter extends Component {
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 						{
 							this.state.isConverting ?
-								"Converting..." :
-								this.state.isError ?
-									"Oops... something went wrong with the conversion" :
-									this.outputFile ?
-										<Fragment>
-											<a
-												ref={this.downloadLinkRef}
-												href={this.outputFile}
-												download={this.outputFileName} >
-												Download {this.outputFileName}
-											</a>
-											<img ref={this.imageOutputRef}
-												src={this.outputFile}
-												alt="whr img"
-												style={{ height: "0px" }}
-												onLoad={
-													() => {
-														const width = this.imageOutputRef.current.width;
-														const aspectRatio = this.imageOutputRef.current.naturalWidth / this.imageOutputRef.current.naturalHeight;
-														const height = width / aspectRatio;
-														this.imageOutputRef.current.style.height = height + "px";
-													}}
-												onTransitionEnd={() => {
-													// SCroll intro view
-													this.imageOutputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-												}
-												}
-											/>
-										</Fragment > :
+								this.outputFile ?
+									<Fragment>
+										<a
+											ref={this.downloadLinkRef}
+											href={this.outputFile}
+											download={this.outputFileName}>
+											Download {this.outputFileName}
+										</a>
+									</Fragment> :
+									<Fragment /> :
+								this.outputFile ?
+									<Fragment>
+										<a
+											ref={this.downloadLinkRef}
+											href={this.outputFile}
+											download={this.outputFileName} >
+											Download {this.outputFileName}
+										</a>
+										<img ref={this.imageOutputRef}
+											src={this.outputFile}
+											alt="whr img"
+											style={{ height: "0px" }}
+											onLoad={
+												() => {
+													const width = this.imageOutputRef.current.width;
+													const aspectRatio = this.imageOutputRef.current.naturalWidth / this.imageOutputRef.current.naturalHeight;
+													const height = width / aspectRatio;
+													this.imageOutputRef.current.style.height = height + "px";
+												}}
+											onTransitionEnd={() => {
+												// SCroll intro view
+												this.imageOutputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+											}
+											}
+										/>
+									</Fragment > :
+									this.state.isError ?
+										"Oops... something went wrong with the conversion" :
 										<Fragment />
 						}
 					</div>

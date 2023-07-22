@@ -15,9 +15,11 @@ export class UtilitiesPageBase64Encoder extends Component {
 		this.inputFileName = null;
 		this.outputText = null;
 
+
 		this.state = {
 			isConverting: false,
-			isError: false
+			isError: false,
+			copyTextInfo: "Click here to copy"
 		};
 
 		this.reader = null;
@@ -88,7 +90,7 @@ export class UtilitiesPageBase64Encoder extends Component {
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 						{
 							this.state.isConverting ?
-								"Converting..." :
+								<Fragment /> :
 								this.state.isError ?
 									"Oops... something went wrong with the conversion" :
 									this.outputText ?
@@ -96,8 +98,14 @@ export class UtilitiesPageBase64Encoder extends Component {
 											<div className="ui-text-title" >
 												<i style={{ cursor: "pointer" }} onClick={() => {
 													navigator.clipboard.writeText(this.outputText);
+													this.setState({ copyTextInfo: "Copied!" },
+														() => {
+															setTimeout(() => {
+																this.setState({ copyTextInfo: "Click here to copy" });
+															}, 1000);
+														});
 												}}>
-													Click here to copy
+													{this.state.copyTextInfo}
 												</i>
 											</div>
 											<div className="ui-text-output">
