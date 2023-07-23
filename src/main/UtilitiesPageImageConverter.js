@@ -52,10 +52,12 @@ export class UtilitiesPageImageConverter extends Component {
 			return;
 		}
 
+		this.setState({ isConvertingAllowed: false });
+
 		if (this.outputFile) {
-			this.setState({ isConvertingAllowed: false });
 			this.imageOutputRef.current.style.height = "0px";
 			await this.waitForImageOutputTransitionEnd();
+			this.imageOutputRef.current.src = "";
 		}
 
 		this.setState({ isConverting: true, isError: false });
@@ -74,12 +76,13 @@ export class UtilitiesPageImageConverter extends Component {
 					ctx.drawImage(img, 0, 0);
 
 					const outputFormat = document.querySelector('.ui-select select').value;
+
 					this.outputFileName = this.inputFileName.split('.')[0] + `_${outputFormat}.${outputFormat}`;
 					this.outputFile = canvas.toDataURL(`image/${outputFormat}`);
 
-					this.setState({ isConverting: false, isConvertingAllowed: true }, () => {
-						// this.downloadLinkRef.current.click();
-					});
+					this.imageOutputRef.current.src = this.outputFile;
+
+					this.setState({ isConverting: false, isConvertingAllowed: true });
 				};
 			};
 
@@ -134,9 +137,8 @@ export class UtilitiesPageImageConverter extends Component {
 								}}
 							>
 								<option value="png">PNG</option>
-								<option value="jpg">JPG</option>
+								<option value="jpeg">JPEG</option>
 								<option value="webp">WEBP</option>
-								<option value="bmp">BMP</option>
 							</select>
 							<div className="ui-select-arrow">
 								<i
@@ -156,46 +158,30 @@ export class UtilitiesPageImageConverter extends Component {
 					</button>
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 						{
-							this.state.isConverting ?
-								this.outputFile ?
-									<Fragment>
-										<a
-											ref={this.downloadLinkRef}
-											href={this.outputFile}
-											download={this.outputFileName}>
-											Download {this.outputFileName}
-										</a>
-									</Fragment> :
-									<Fragment /> :
-								this.outputFile ?
-									<Fragment>
-										<a
-											ref={this.downloadLinkRef}
-											href={this.outputFile}
-											download={this.outputFileName} >
-											Download {this.outputFileName}
-										</a>
-										<img ref={this.imageOutputRef}
-											src={this.outputFile}
-											alt="whr img"
-											style={{ height: "0px" }}
-											onLoad={
-												() => {
-													const width = this.imageOutputRef.current.width;
-													const aspectRatio = this.imageOutputRef.current.naturalWidth / this.imageOutputRef.current.naturalHeight;
-													const height = width / aspectRatio;
-													this.imageOutputRef.current.style.height = height + "px";
-												}}
-											onTransitionEnd={() => {
-												// SCroll intro view
-												this.imageOutputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-											}
-											}
-										/>
-									</Fragment > :
-									this.state.isError ?
-										"Oops... something went wrong with the conversion" :
-										<Fragment />
+							<Fragment>
+								<a
+									ref={this.downloadLinkRef}
+									href={this.outputFile}
+									download={this.outputFileName} >
+									Download {this.outputFileName}
+								</a>
+								<img ref={this.imageOutputRef}
+									style={{
+										height: "0px"
+									}}
+									onLoad={
+										() => {
+											const width = this.imageOutputRef.current.width;
+											const aspectRatio = this.imageOutputRef.current.naturalWidth / this.imageOutputRef.current.naturalHeight;
+											const height = width / aspectRatio;
+											this.imageOutputRef.current.style.height = height + "px";
+										}}
+									onTransitionEnd={() => {
+										this.imageOutputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+									}
+									}
+								/>
+							</Fragment >
 						}
 					</div>
 				</div>

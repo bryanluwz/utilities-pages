@@ -38,7 +38,7 @@ export default class Main extends Component {
 						<Tag key={index} />
 					);
 				})}
-				<div style={{ height: "10px" }} justForPaddingAtTheBottom />
+				<div style={{ height: "10px" }} />
 			</ContentDisplay>
 		);
 	}

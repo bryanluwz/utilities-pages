@@ -9,6 +9,7 @@ Check it out [here](https://bryanluwz.github.io/utilities-pages)
 ## Active Features
 
 1. Anything to `base64` encoding
+2. Image type converter (among jpg, png, and webp (sometimes doesnt work on safari))
 
 ## Inactive Features
 
