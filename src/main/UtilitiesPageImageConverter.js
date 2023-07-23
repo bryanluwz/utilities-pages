@@ -87,7 +87,7 @@ export class UtilitiesPageImageConverter extends Component {
 			};
 
 			this.reader.onerror = (event) => {
-				this.setState({ isConverting: false, isError: true });
+				this.setState({ isConverting: false, isError: true, isConvertingAllowed: true });
 			};
 		}
 
@@ -118,6 +118,7 @@ export class UtilitiesPageImageConverter extends Component {
 							<input
 								type="file"
 								id="file-input"
+								accept="image/*"
 								onChange={this.handleFileUpload}
 							/>
 						</label>
@@ -169,6 +170,7 @@ export class UtilitiesPageImageConverter extends Component {
 									style={{
 										height: "0px"
 									}}
+									alt=""
 									onLoad={
 										() => {
 											const width = this.imageOutputRef.current.width;
@@ -181,6 +183,10 @@ export class UtilitiesPageImageConverter extends Component {
 									}
 									}
 								/>
+								{
+									this.state.isError &&
+									"Error converting image"
+								}
 							</Fragment >
 						}
 					</div>
