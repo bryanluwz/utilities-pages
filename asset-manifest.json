@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/utilities-pages/static/css/main.9b5fd596.css",
-    "main.js": "/utilities-pages/static/js/main.ec180075.js",
+    "main.css": "/utilities-pages/static/css/main.43e3c5c2.css",
+    "main.js": "/utilities-pages/static/js/main.06ee4de1.js",
     "static/media/lulo-font.ttf": "/utilities-pages/static/media/lulo-font.cf6ce051896b18d3449b.ttf",
     "index.html": "/utilities-pages/index.html",
-    "main.9b5fd596.css.map": "/utilities-pages/static/css/main.9b5fd596.css.map",
-    "main.ec180075.js.map": "/utilities-pages/static/js/main.ec180075.js.map"
+    "main.43e3c5c2.css.map": "/utilities-pages/static/css/main.43e3c5c2.css.map",
+    "main.06ee4de1.js.map": "/utilities-pages/static/js/main.06ee4de1.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b5fd596.css",
-    "static/js/main.ec180075.js"
+    "static/css/main.43e3c5c2.css",
+    "static/js/main.06ee4de1.js"
   ]
 }
