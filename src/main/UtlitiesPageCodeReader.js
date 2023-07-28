@@ -1,41 +1,37 @@
-import { Component, createRef, Fragment } from "react";
+import { Component, Fragment, createRef } from "react";
 
+import { BrowserMultiFormatReader } from "@zxing/browser";
 
-export class UtilitiesPageBase64Encoder extends Component {
+export class UtilitiesPageCodeReader extends Component {
 	constructor(props) {
 		super(props);
 
-		this.title = "Base64 Encoder";
-		this.description = "Convert files to Base64 string";
+		this.title = "Code Reader";
+		this.description = "Reads different kind of code formats";
 
 		this.inputFileTypeRef = createRef();
 		this.extraInfoLabelRef = createRef();
-		this.imgDropZone = createRef();
 
 		this.inputFile = null;
 		this.inputFileName = null;
-		this.outputText = null;
+		this.inputFileUrl = null;
+
+		this.reader = null;
+		this.codeReader = null;
 
 		this.state = {
+			convertFileTypeSelectArrowIsRotated: false,
 			isConverting: false,
+			isConvertingAllowed: true,
 			isError: false,
 			copyTextInfo: "Click here to copy"
 		};
 
-		this.reader = null;
+		this.imgDropZone = createRef();
 	}
 
 	componentDidMount() {
-		this.reader = new FileReader();
-		this.reader.onloadend = () => {
-			const base64String = this.reader.result.split(',')[1]; // Extract the Base64 string from Data URL
-			this.outputText = base64String;
-			this.setState({ isConverting: false, isError: false });
-		};
-		this.reader.onerror = () => {
-			this.outputText = null;
-			this.setState({ isConverting: false, isError: true });
-		};
+		this.codeReader = new BrowserMultiFormatReader();
 
 		this.imgDropZone.current.addEventListener("dragover", this.handleDragOver);
 		this.imgDropZone.current.addEventListener("drop", this.handleDrop);
@@ -57,6 +53,7 @@ export class UtilitiesPageBase64Encoder extends Component {
 			this.forceUpdate();
 		}
 	};
+
 	handleConvertButtonClick = async () => {
 		if (this.state.isConverting || this.inputFile === null) {
 			return;
@@ -64,7 +61,15 @@ export class UtilitiesPageBase64Encoder extends Component {
 
 		this.setState({ isConverting: true, isError: false });
 
-		this.reader.readAsDataURL(this.inputFile);
+		this.codeReader.decodeFromImageUrl(this.inputFileUrl, this.inputFile.width, this.inputFile.height)
+			.then(result => {
+				this.outputText = result.text;
+				this.setState({ isConverting: false, isError: false });
+			})
+			.catch(err => {
+				this.outputText = null;
+				this.setState({ isConverting: false, isError: true });
+			});
 	};
 
 	handleFileUpload = (event) => {
@@ -73,6 +78,8 @@ export class UtilitiesPageBase64Encoder extends Component {
 		this.inputFileName = inputFileName;
 		this.inputFileTypeRef.current.innerHTML = "Input: <b>" + inputFileName + "</b>";
 		this.inputFile = event.target.files[0];
+		this.inputFileUrl = URL.createObjectURL(this.inputFile);
+		this.forceUpdate();
 	};
 
 	render() {
@@ -99,6 +106,8 @@ export class UtilitiesPageBase64Encoder extends Component {
 						</div>
 					</div>
 
+					<img src={this.inputFileUrl} alt="" />
+
 					<button
 						className={`ui-button ${this.state.isConverting ? 'ui-button-disabled' : ''}`}
 						id="convert-button"
@@ -106,6 +115,7 @@ export class UtilitiesPageBase64Encoder extends Component {
 					>
 						Convert
 					</button>
+
 					<div className="ui-extra-info" ref={this.extraInfoLabelRef}>
 						{
 							this.state.isConverting ?
@@ -140,6 +150,6 @@ export class UtilitiesPageBase64Encoder extends Component {
 	}
 };
 
-UtilitiesPageBase64Encoder.displayName = "Base64 Encoder";
-UtilitiesPageBase64Encoder.title = "Base64 Encoder";
-UtilitiesPageBase64Encoder.description = "Convert files to Base64 string";
+UtilitiesPageCodeReader.displayName = "Code Reader";
+UtilitiesPageCodeReader.title = "Code Reader";
+UtilitiesPageCodeReader.description = "Reads different kind of code formats";

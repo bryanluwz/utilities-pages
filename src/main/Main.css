@@ -45,6 +45,10 @@
     background-color: var(--lavender-pastel-4);
 }
 
+.ui-flex-column > img {
+    align-self: center;
+}
+
 .utils-page-box .ui-flex-row {
     display: flex;
     flex-direction: row;
@@ -140,7 +144,8 @@
     text-decoration: none;
 }
 
-.ui-extra-info > img {
+.ui-extra-info > img,
+.ui-flex-column > img {
     width: 100%;
     max-width: 300px;
     height: auto;

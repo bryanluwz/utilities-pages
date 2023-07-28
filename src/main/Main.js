@@ -1,8 +1,11 @@
 import { Component } from "react";
+
 import { ContentDisplay } from "../components/others/";
+import SearchBar from "../components/others/Searchbar";
+
 import { UtilitiesPageBase64Encoder } from "./UtilitiesPageBase64Encoder";
 import { UtilitiesPageImageConverter } from "./UtilitiesPageImageConverter";
-import SearchBar from "../components/others/Searchbar";
+import { UtilitiesPageCodeReader } from "./UtlitiesPageCodeReader";
 
 export default class Main extends Component {
 	constructor(props) {
@@ -11,7 +14,8 @@ export default class Main extends Component {
 		this.state = {
 			allUtilities: {
 				"UtilitiesPageEncoder": UtilitiesPageBase64Encoder,
-				"UtilitiesPageImageConverter": UtilitiesPageImageConverter
+				"UtilitiesPageImageConverter": UtilitiesPageImageConverter,
+				"UtilitiesPageCodeReader": UtilitiesPageCodeReader,
 			}
 		};
 	}

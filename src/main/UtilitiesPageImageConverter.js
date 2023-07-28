@@ -18,6 +18,7 @@ export class UtilitiesPageImageConverter extends Component {
 
 		this.downloadLinkRef = createRef();
 		this.imageOutputRef = createRef();
+		this.imgDropZone = createRef();
 
 		this.reader = null;
 
@@ -30,7 +31,26 @@ export class UtilitiesPageImageConverter extends Component {
 	}
 
 	componentDidMount() {
+		this.imgDropZone.current.addEventListener("dragover", this.handleDragOver);
+		this.imgDropZone.current.addEventListener("drop", this.handleDrop);
 	}
+
+	handleDragOver = (event) => {
+		event.preventDefault();
+	};
+
+	handleDrop = (event) => {
+		event.preventDefault();
+		var file = event.dataTransfer?.files[0];
+
+		if (file) {
+			this.inputFile = file;
+			this.inputFileName = file.name;
+			this.inputFileTypeRef.current.innerHTML = "Input: <b>" + this.inputFileName + "</b>";
+			this.inputFileUrl = URL.createObjectURL(this.inputFile);
+			this.forceUpdate();
+		}
+	};
 
 	// I spent a lot of time making this animation you know
 	waitForImageOutputTransitionEnd = () => {
@@ -111,7 +131,7 @@ export class UtilitiesPageImageConverter extends Component {
 				<div className="utils-description">
 					{this.description}
 				</div>
-				<div className="ui-flex-column">
+				<div className="ui-flex-column" ref={this.imgDropZone}>
 					<div className="ui-flex-row">
 						<label className="ui-file-input-wrapper">
 							<div>Upload File</div>
