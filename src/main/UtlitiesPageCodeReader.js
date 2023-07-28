@@ -24,7 +24,9 @@ export class UtilitiesPageCodeReader extends Component {
 			isConverting: false,
 			isConvertingAllowed: true,
 			isError: false,
-			copyTextInfo: "Click here to copy"
+			copyTextInfo: "Click here to copy",
+			pasteText: "Paste",
+			isClipboardApiSupported: this.isClipboardApiSupported()
 		};
 
 		this.imgDropZone = createRef();
@@ -36,6 +38,11 @@ export class UtilitiesPageCodeReader extends Component {
 		this.imgDropZone.current.addEventListener("dragover", this.handleDragOver);
 		this.imgDropZone.current.addEventListener("drop", this.handleDrop);
 	}
+
+	// I can cheese copy but not paste, so just disable for safari lol
+	isClipboardApiSupported = () => {
+		return !!navigator.clipboard && typeof navigator.clipboard.read === 'function';
+	};
 
 	handleDragOver = (event) => {
 		event.preventDefault();
@@ -82,6 +89,42 @@ export class UtilitiesPageCodeReader extends Component {
 		this.forceUpdate();
 	};
 
+	handlePaste = () => {
+		if (!this.state.isClipboardApiSupported) {
+			this.setState({ pasteText: "Paste not supported on this device. SAD :(" },
+				() => {
+					setTimeout(() => {
+						this.setState({ pasteText: "Do not paste 😠" });
+					}, 2000);
+				});
+			return;
+		}
+
+		// Read image from clipboard
+		navigator.clipboard.read()
+			.then(clipboardItems => {
+				clipboardItems.forEach(clipboardItem => {
+					clipboardItem.types.forEach(type => {
+						if (type.startsWith("image/")) {
+							const imageFormat = type.substring(6);
+							clipboardItem.getType(`image/${imageFormat}`).then(blob => {
+								// Here, blob is the actual image data
+								this.inputFile = blob;
+								this.inputFileName = "Clipboard Image";
+								this.inputFileTypeRef.current.innerHTML = "Input: <b>" + this.inputFileName + "</b>";
+								this.inputFileUrl = URL.createObjectURL(this.inputFile);
+								this.forceUpdate();
+							});
+						}
+					});
+				});
+			}
+			)
+			.catch(err => {
+				console.log(err);
+			});
+	};
+
 	render() {
 		return (
 			<div className="utils-page-box">
@@ -104,31 +147,8 @@ export class UtilitiesPageCodeReader extends Component {
 						<div ref={this.inputFileTypeRef}>
 							Input: None
 						</div>
-						<button className="ui-button" onClick={
-							() => {
-								// Read image from clipboard
-								navigator.clipboard.read()
-									.then(clipboardItems => {
-										clipboardItems.forEach(clipboardItem => {
-											clipboardItem.types.forEach(type => {
-												if (type.startsWith("image/")) {
-													const imageFormat = type.substring(6);
-													clipboardItem.getType(`image/${imageFormat}`).then(blob => {
-														// Here, blob is the actual image data
-														this.inputFile = blob;
-														this.inputFileName = "Clipboard Image";
-														this.inputFileTypeRef.current.innerHTML = "Input: <b>" + this.inputFileName + "</b>";
-														this.inputFileUrl = URL.createObjectURL(this.inputFile);
-														this.forceUpdate();
-													});
-												}
-											});
-										});
-									}
-									);
-							}
-						}>
-							Paste
+						<button className="ui-button" onClick={this.handlePaste}>
+							{this.state.pasteText}
 						</button>
 					</div>
 
@@ -152,7 +172,20 @@ export class UtilitiesPageCodeReader extends Component {
 										<Fragment>
 											<div className="ui-text-title" >
 												<i style={{ cursor: "pointer" }} onClick={() => {
-													navigator.clipboard.writeText(this.outputText);
+													// iOS doesn't support navigator.clipboard.writeText
+													// navigator.clipboard.writeText(this.outputText);
+
+													const textToCopy = this.outputText;
+
+													const tempInput = document.createElement('input');
+													tempInput.value = textToCopy;
+													document.body.appendChild(tempInput);
+													tempInput.select();
+
+													document.execCommand('copy');
+
+													document.body.removeChild(tempInput);
+
 													this.setState({ copyTextInfo: "Copied!" },
 														() => {
 															setTimeout(() => {
