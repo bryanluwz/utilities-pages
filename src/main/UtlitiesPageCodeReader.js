@@ -104,6 +104,32 @@ export class UtilitiesPageCodeReader extends Component {
 						<div ref={this.inputFileTypeRef}>
 							Input: None
 						</div>
+						<button className="ui-button" onClick={
+							() => {
+								// Read image from clipboard
+								navigator.clipboard.read()
+									.then(clipboardItems => {
+										clipboardItems.forEach(clipboardItem => {
+											clipboardItem.types.forEach(type => {
+												if (type.startsWith("image/")) {
+													const imageFormat = type.substring(6);
+													clipboardItem.getType(`image/${imageFormat}`).then(blob => {
+														// Here, blob is the actual image data
+														this.inputFile = blob;
+														this.inputFileName = "Clipboard Image";
+														this.inputFileTypeRef.current.innerHTML = "Input: <b>" + this.inputFileName + "</b>";
+														this.inputFileUrl = URL.createObjectURL(this.inputFile);
+														this.forceUpdate();
+													});
+												}
+											});
+										});
+									}
+									);
+							}
+						}>
+							Paste
+						</button>
 					</div>
 
 					<img src={this.inputFileUrl} alt="" />
@@ -121,7 +147,7 @@ export class UtilitiesPageCodeReader extends Component {
 							this.state.isConverting ?
 								<Fragment /> :
 								this.state.isError ?
-									"Oops... something went wrong with the conversion" :
+									"Are you sure this is a code? 🤔" :
 									this.outputText ?
 										<Fragment>
 											<div className="ui-text-title" >
